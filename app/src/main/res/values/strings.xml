@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">Fire_Test</string>
-    <string name="sign_out">SIGN_OUT</string>
-    <string name="item_name">ITEM_NAME</string>
-    <string name="add_items">ADD_ITEMS</string>
-    <string name="default_cart_size">\?</string>
-    <string name="muserid">mUserId</string>
-</resources>

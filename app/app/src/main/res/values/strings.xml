@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SIH_App</string>
+    <string name="focus_image">FOCUS_IMAGE</string>
+    <string name="item_name">ITEM_NAME</string>
+    <string name="add_button_text">ADD</string>
+    <string name="default_guest_name">[Guest name]</string>
+    <string name="default_party_size">\?</string>
+    <string name="mUser_id">mUser_ID</string>
+    <string name="please_all_items_to_cart">Please_All_Items_To_Cart</string>
+    <string name="add_items_to_cart">Add_Items_To_Cart</string>
+</resources>
