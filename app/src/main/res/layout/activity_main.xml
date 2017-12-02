@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    tools:context="com.example.nishant.fire_test.MainActivity">
+
+    <TextView
+        android:id="@+id/mUser_Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:drawableStart="@drawable/ic_perm_identity_black_24dp"
+        android:drawablePadding="16dp"
+        android:hint="@string/muserid" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/item_name_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/item_name"
+            android:inputType="textPersonName|textCapWords"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/add_item_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:layout_marginTop="48dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/add_items"
+        android:onClick="onClick"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cart_item_list"
+        android:stackFromBottom="false"
+        android:divider="@android:color/background_dark"
+        android:transcriptMode="alwaysScroll"
+        tools:listitem="@layout/item_list">
+    </ListView>
+
+
+</LinearLayout>
