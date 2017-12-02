@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -50,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerAdapter mRecyclerAdapter;
     private int counter=1;
     private ListView mCartListView;
-
+    private TextView name_text_view;
+    private static final int REQUEST_CODE=100;
+    private TextView cart_size_text_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         mfirebaseDatabase=FirebaseDatabase.getInstance();
         mfirebaseAuth=FirebaseAuth.getInstance();
-        mdatabaseReference=mfirebaseDatabase.getReference().child("ITEMS_ADDED");
+        mdatabaseReference=mfirebaseDatabase.getReference().child("item_added");
 
         item_name_edit_text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 if(user!=null){
                     user.getDisplayName();
                       onSignedIn();
-                    mUserId.setText(mdatabaseReference.child("ITEMS_ADDED").getKey());
+                    mUserId.setText(mdatabaseReference.child("item_added").getKey());
                     Toast.makeText(MainActivity.this,"Signed_In",Toast.LENGTH_SHORT).show();
 
                 } else{
@@ -124,16 +127,39 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==RC_SIGN_IN){
-            if(resultCode==RESULT_OK){
-                Toast.makeText(MainActivity.this,"SIGNED_IN",Toast.LENGTH_SHORT).show();
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(MainActivity.this, "SIGNED_IN", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(MainActivity.this, "SIGNED_CANCELLED", Toast.LENGTH_SHORT).show();
             }
-            else if(resultCode==RESULT_CANCELED) {
-                Toast.makeText(MainActivity.this,"SIGNED_CANCELLED",Toast.LENGTH_SHORT).show();
-            }
-            finish();
 
+            if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+                if (data != null) {
+
+                    final Barcode barcode = data.getParcelableExtra("barcode");
+                    attachDatabaseReadListener();
+                    item_name_edit_text = (EditText) findViewById(R.id.item_name_edit_text);
+
+                    name_text_view = (TextView) findViewById(R.id.name_text_view);
+                    mUserId=(TextView)findViewById(R.id.mUser_Id);
+                    cart_size_text_view=(TextView)findViewById(R.id.cart_size_text_view);
+                    counter++;
+                    String count =Integer.toString(counter);
+                    String uid ="";
+                    Toast.makeText(MainActivity.this, item_name_edit_text.getText().toString() + "has been added to cart", Toast.LENGTH_SHORT).show();
+                    ListItem listItem=new ListItem(barcode.toString(),count,uid);
+                    mdatabaseReference.push().setValue(listItem);
+                    mRecyclerAdapter.add(listItem);
+                    name_text_view.setText(barcode.toString());
+                    cart_size_text_view.setText(count);
+                    mUserId.setText(listItem.getmUserId());
+                    item_name_edit_text.getText().clear();
+                    mRecyclerAdapter.notifyDataSetChanged();
+                }
+            }
         }
+        finish();
     }
 
     @Override
@@ -187,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    ListItem listItem=dataSnapshot.child("ITEMS_ADDED").getValue(ListItem.class);
+                    ListItem listItem=dataSnapshot.child("item_added").getValue(ListItem.class);
                     mRecyclerAdapter.add(listItem);
 
                 }
@@ -224,17 +250,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         if (view.getId() == R.id.add_item_button) {
-            add_item_button = (Button) findViewById(R.id.add_item_button);
-            item_name_edit_text = (EditText) findViewById(R.id.item_name_edit_text);
-            mUserId=(TextView)findViewById(R.id.mUser_Id);
-            String item_name,count;
-            item_name = item_name_edit_text.getText().toString();
-            counter++;
-            count=Integer.toString(counter);
-            Toast.makeText(MainActivity.this, item_name + "has been added to cart", Toast.LENGTH_SHORT).show();
-            ListItem listItem=new ListItem(item_name_edit_text.getText().toString(),count,mUserId.toString());
-            mdatabaseReference.push().setValue(listItem);
-            item_name_edit_text.setText("");
+            Intent intent =new Intent(MainActivity.this,ScanActivity.class);
+            startActivityForResult(intent,REQUEST_CODE);
         }
 
     }

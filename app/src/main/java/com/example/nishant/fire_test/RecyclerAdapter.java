@@ -29,15 +29,18 @@ public class RecyclerAdapter extends ArrayAdapter<ListItem> {
             convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.item_list, parent, false);
         }
 
-       TextView  name_text_view =  convertView.findViewById(R.id.name_text_view);
+       TextView  name_text_view =   convertView.findViewById(R.id.name_text_view);
         TextView cart_size_text_view = convertView.findViewById(R.id.cart_size_text_view);
         TextView mUserId=convertView.findViewById(R.id.mUser_Id);
 
         ListItem listItem = getItem(position);
 
-             name_text_view.setText(listItem.getitem());
-             cart_size_text_view.setText(listItem.getCount());
-             mUserId.setText(listItem.setmUserId());
+        if(listItem.getmUserId()!=null){
+
+            name_text_view.setText(listItem.getitem());
+            cart_size_text_view.setText(listItem.getCount());
+            mUserId.setText(listItem.getmUserId());
+        }
 
         return convertView;
     }

@@ -9,12 +9,14 @@ public class ListItem {
     private String count;
     private String item;
     private String mUserId;
-
+    public ListItem(){
+    }
 
     public ListItem(String item,String count,String mUserId){
         this.item=item;
         this.count=count;
         this.mUserId=mUserId;
+
     }
 
     public void setCount(String count){
@@ -30,6 +32,6 @@ public class ListItem {
         return item;
     }
 
-    public void getmUserId(String mUserId){ this.mUserId=mUserId;}
-    public String setmUserId(){ return mUserId;}
+    public String getmUserId(){ return mUserId;}
+    public void setmUserId(String mUserId){this.mUserId=mUserId;}
 }
